@@ -140,6 +140,9 @@ Needs Xcode 26 or later (for the Icon Composer icon), Rust
 ./scripts/package-dmg.sh    # → dist/Folio-<version>.dmg
 ```
 
+`./scripts/release.sh <version>` publishes a new version: GitHub release,
+DMG, and the Homebrew cask update.
+
 The build downloads the face model (38.7 MB) once and refuses it unless its
 SHA-256 matches. `Folio --snapshots <dir>` renders every screen with
 synthetic history from a scratch database, in light and dark.
