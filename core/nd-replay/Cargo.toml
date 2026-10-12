@@ -1,0 +1,9 @@
+[package]
+name = "nd-replay"
+version.workspace = true
+edition.workspace = true
+publish = false
+
+[dependencies]
+nd-core = { path = "../nd-core" }
+serde_json.workspace = true

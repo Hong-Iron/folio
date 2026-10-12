@@ -1,0 +1,32 @@
+name: core
+
+on:
+  push:
+    paths: ["core/**", "scripts/fetch-models.sh", ".github/workflows/core.yml"]
+  pull_request:
+    paths: ["core/**", "scripts/fetch-models.sh", ".github/workflows/core.yml"]
+
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: core
+      - name: Fetch the face model
+        run: ./scripts/fetch-models.sh
+      - name: Test
+        working-directory: core
+        run: cargo test --workspace
+      - name: Lint
+        working-directory: core
+        run: cargo clippy --workspace --all-targets -- -D warnings
+      - name: Replay synthetic traces
+        working-directory: core
+        run: |
+          cargo run -q -p nd-replay -- synth "$RUNNER_TEMP/traces"
+          cargo run -q -p nd-replay -- check "$RUNNER_TEMP/traces"
